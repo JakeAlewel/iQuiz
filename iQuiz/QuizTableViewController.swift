@@ -14,6 +14,17 @@ class QuizTableViewController : UITableViewController {
     let dataProxy = QuizDataProxy();
     var dataDtos : [QuizDataDTO]?;
     
+    // Mark: View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        
+        self.tableView.tableFooterView = UIView();
+
+        let barButtonItem = UIBarButtonItem(title: "Settings", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("handleSettingsButtonTapped:"));        
+        self.navigationItem.setRightBarButtonItem(barButtonItem, animated: false);
+    }
+    
     override func viewWillAppear(animated: Bool) {
         dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
             if successful {
@@ -22,6 +33,25 @@ class QuizTableViewController : UITableViewController {
             }
         }
     }
+    
+    // Mark: Actions
+    
+    func handleSettingsButtonTapped(sender: UIButton) {
+        let alertController = UIAlertController(title: "Settings", message: "They Go Here", preferredStyle: UIAlertControllerStyle.Alert);
+
+        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        alertController.addAction(alertAction);
+        
+        presentViewController(alertController, animated: true, completion: nil);
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true);
+        
+        self.performSegueWithIdentifier("NavigateToQuizQuestions", sender: nil);
+    }
+    
+    // Mark: UITableView
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if dataDtos == nil {
