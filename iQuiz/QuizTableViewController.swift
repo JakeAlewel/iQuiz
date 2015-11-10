@@ -48,7 +48,7 @@ class QuizTableViewController : UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true);
         
-        self.performSegueWithIdentifier("NavigateToQuizQuestions", sender: nil);
+        self.performSegueWithIdentifier("NavigateToQuizQuestion", sender: nil);
     }
     
     // Mark: UITableView

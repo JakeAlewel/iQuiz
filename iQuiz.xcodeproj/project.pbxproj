@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E8FFF5B1BF29ECD004942F6 /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8FFF5A1BF29ECD004942F6 /* QuestionViewController.swift */; };
+		4E8FFF5D1BF2A17D004942F6 /* QuizCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8FFF5C1BF2A17D004942F6 /* QuizCloseButton.swift */; };
 		4EF569351BE9B2DA002F6915 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF569341BE9B2DA002F6915 /* AppDelegate.swift */; };
 		4EF5693A1BE9B2DA002F6915 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF569381BE9B2DA002F6915 /* Main.storyboard */; };
 		4EF5693C1BE9B2DA002F6915 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF5693B1BE9B2DA002F6915 /* Assets.xcassets */; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E8FFF5A1BF29ECD004942F6 /* QuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
+		4E8FFF5C1BF2A17D004942F6 /* QuizCloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizCloseButton.swift; sourceTree = "<group>"; };
 		4EF569311BE9B2DA002F6915 /* iQuiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iQuiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF569341BE9B2DA002F6915 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4EF569391BE9B2DA002F6915 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -80,6 +84,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E8FFF5E1BF2A19C004942F6 /* QuizTableView */ = {
+			isa = PBXGroup;
+			children = (
+				4EF569641BE9C18F002F6915 /* QuizTableViewCell.swift */,
+				4EF569621BE9B434002F6915 /* QuizTableViewController.swift */,
+			);
+			name = QuizTableView;
+			sourceTree = "<group>";
+		};
+		4E8FFF5F1BF2A1B2004942F6 /* QuizData */ = {
+			isa = PBXGroup;
+			children = (
+				4EF569661BE9C619002F6915 /* QuizDataProxy.swift */,
+				4EF569681BE9C72C002F6915 /* QuizDataDTO.swift */,
+			);
+			name = QuizData;
+			sourceTree = "<group>";
+		};
+		4E8FFF601BF2A1BE004942F6 /* QuizQuestions */ = {
+			isa = PBXGroup;
+			children = (
+				4E8FFF5C1BF2A17D004942F6 /* QuizCloseButton.swift */,
+				4E8FFF5A1BF29ECD004942F6 /* QuestionViewController.swift */,
+			);
+			name = QuizQuestions;
+			sourceTree = "<group>";
+		};
 		4EF569281BE9B2DA002F6915 = {
 			isa = PBXGroup;
 			children = (
@@ -105,10 +136,9 @@
 			children = (
 				4EF569341BE9B2DA002F6915 /* AppDelegate.swift */,
 				4EF569381BE9B2DA002F6915 /* Main.storyboard */,
-				4EF569641BE9C18F002F6915 /* QuizTableViewCell.swift */,
-				4EF569661BE9C619002F6915 /* QuizDataProxy.swift */,
-				4EF569681BE9C72C002F6915 /* QuizDataDTO.swift */,
-				4EF569621BE9B434002F6915 /* QuizTableViewController.swift */,
+				4E8FFF601BF2A1BE004942F6 /* QuizQuestions */,
+				4E8FFF5F1BF2A1B2004942F6 /* QuizData */,
+				4E8FFF5E1BF2A19C004942F6 /* QuizTableView */,
 				4EF5693B1BE9B2DA002F6915 /* Assets.xcassets */,
 				4EF5693D1BE9B2DA002F6915 /* LaunchScreen.storyboard */,
 				4EF569401BE9B2DA002F6915 /* Info.plist */,
@@ -267,8 +297,10 @@
 			files = (
 				4EF569351BE9B2DA002F6915 /* AppDelegate.swift in Sources */,
 				4EF569691BE9C72C002F6915 /* QuizDataDTO.swift in Sources */,
+				4E8FFF5B1BF29ECD004942F6 /* QuestionViewController.swift in Sources */,
 				4EF569671BE9C619002F6915 /* QuizDataProxy.swift in Sources */,
 				4EF569631BE9B434002F6915 /* QuizTableViewController.swift in Sources */,
+				4E8FFF5D1BF2A17D004942F6 /* QuizCloseButton.swift in Sources */,
 				4EF569651BE9C18F002F6915 /* QuizTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -494,6 +526,7 @@
 				4EF5695B1BE9B2DA002F6915 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4EF5695C1BE9B2DA002F6915 /* Build configuration list for PBXNativeTarget "iQuizTests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +535,7 @@
 				4EF5695E1BE9B2DA002F6915 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4EF5695F1BE9B2DA002F6915 /* Build configuration list for PBXNativeTarget "iQuizUITests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +544,7 @@
 				4EF569611BE9B2DA002F6915 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

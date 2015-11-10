@@ -70,40 +70,30 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="iQuiz" id="qkJ-gq-1BL" userLabel="iQuiz"/>
                     <connections>
-                        <segue destination="nKM-2E-Sil" kind="show" identifier="NavigateToQuizQuestions" id="7Qe-4S-wc2"/>
+                        <segue destination="DAH-31-NtG" kind="show" identifier="NavigateToQuizQuestion" id="Le9-Ja-D85"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eXw-dH-bEg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="929" y="529"/>
         </scene>
-        <!--Table View Controller-->
-        <scene sceneID="Zux-2X-jiD">
+        <!--Question-->
+        <scene sceneID="7lH-Ip-ifH">
             <objects>
-                <tableViewController id="nKM-2E-Sil" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Reg-pU-Kpm">
+                <viewController id="DAH-31-NtG" userLabel="Question" customClass="QuestionViewController" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pzJ-1R-hmb"/>
+                        <viewControllerLayoutGuide type="bottom" id="ojK-2C-Se0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Smb-H1-DZE">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="O3h-W8-AZh">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="O3h-W8-AZh" id="tj7-z2-ecG">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="nKM-2E-Sil" id="cSk-Pw-S21"/>
-                            <outlet property="delegate" destination="nKM-2E-Sil" id="8v4-jH-xPS"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Rup-lv-Lpg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="noJ-ad-U8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1592" y="529"/>
+            <point key="canvasLocation" x="1603" y="529"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OTA-fW-PiO">
@@ -112,6 +102,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="WrO-E0-OvO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="ySq-xM-HCG" kind="relationship" relationship="rootViewController" id="DIU-ca-jcC"/>
