@@ -11,19 +11,29 @@ import UIKit
 
 class FinishedViewController: UIViewController {
 
+    @IBOutlet weak var resultsDescriptionLabel: UILabel!
+    @IBOutlet weak var resultsDataLabel: UILabel!
+    
     var dataDTO : QuizDataDTO?
     
-    @IBOutlet weak var resultsDescriptionLabel: UILabel!
-    
-    @IBOutlet weak var resultsDataLabel: UILabel!
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad();
         
+        configureNavigationBar();
+        configureDescriptionLabel();
+        configureDataLabel();
+    }
+    
+    // MARK: - UI Configuration
+    
+    func configureNavigationBar() {
         self.navigationItem.setHidesBackButton(true, animated: false);
-        
         self.title = "Finished!";
-        
+    }
+    
+    func configureDescriptionLabel() {
         let percent = Double(self.dataDTO!.numberOfCorrectAnswers) / Double(self.dataDTO!.questions.count) * 100;
         var descriptionText : String = "Error"
         switch (percent) {
@@ -45,10 +55,14 @@ class FinishedViewController: UIViewController {
         default:
             break;
         }
-        
         self.resultsDescriptionLabel.text = descriptionText;
+    }
+    
+    func configureDataLabel() {
         self.resultsDataLabel.text = "\(self.dataDTO!.numberOfCorrectAnswers) / \(self.dataDTO!.questions.count)"
     }
+    
+    // MARK: - Actions
     
     @IBAction func handleDoneButtonPressed(sender: UIButton) {
         self.navigationController?.popToRootViewControllerAnimated(true);

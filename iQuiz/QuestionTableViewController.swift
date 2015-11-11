@@ -42,13 +42,13 @@ class QuestionTableViewController : UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated);
         
-        self.title = "Question \(currentQuestionIndex! + 1)";
+        self.title = "Question \(self.currentQuestionIndex! + 1)";
         self.tableView.reloadData();
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "NavigateToAnswer") {
-            let correctAnswerIndex = self.dataDTO!.questions[currentQuestionIndex!].correctAnswerIndex;
+            let correctAnswerIndex = self.dataDTO!.questions[self.currentQuestionIndex!].correctAnswerIndex;
             let selectedAnswerIndex = lastSelectedIndexPath!.row - 1;
             let didAnswerCorrectly = (correctAnswerIndex == selectedAnswerIndex);
             if (didAnswerCorrectly == true) {

@@ -51,7 +51,7 @@ class QuizTableViewController : UITableViewController {
         let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
         alertController.addAction(alertAction);
         
-        presentViewController(alertController, animated: true, completion: nil);
+        self.presentViewController(alertController, animated: true, completion: nil);
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
