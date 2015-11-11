@@ -9,18 +9,17 @@
 import Foundation
 import UIKit
 
-let superLongBad = "Super long Test Question Cell to test line wrapping and other super long stuff.";
-
-let QuestionCellIdentifier = "QuestionCell";
-let AnswerOptionCellIdentifier = "AnswerOptionCell";
-
 class QuestionTableViewController : UITableViewController {
 
     var dataDTO : QuizDataDTO?;
     var currentQuestionIndex : Int?;
     
-    static var questionSizingCell : QuestionTableViewCell? = nil;
-    static var answerOptionSizingCell : AnswerOptionTableViewCell? = nil;
+    private var lastSelectedIndexPath : NSIndexPath?;
+    
+    private let QuestionCellIdentifier = "QuestionCell";
+    private let AnswerOptionCellIdentifier = "AnswerOptionCell";
+    private static var questionSizingCell : QuestionTableViewCell? = nil;
+    private static var answerOptionSizingCell : AnswerOptionTableViewCell? = nil;
     
     // MARK: - View Lifecycle
     
@@ -33,20 +32,29 @@ class QuestionTableViewController : UITableViewController {
         
         self.navigationItem.setHidesBackButton(true, animated: false);
         
-        let barButtonItem = UIBarButtonItem(title: "Close", style: .Done, target: self, action: Selector("closeButtonTapped:"));
-        self.navigationItem.setRightBarButtonItem(barButtonItem, animated: false);
+        let closeButton = UIBarButtonItem(title: "Close", style: .Done, target: self, action: Selector("closeButtonTapped:"));
+        self.navigationItem.setLeftBarButtonItem(closeButton, animated: false);
+        
+        let submitButton = UIBarButtonItem(title: "Submit", style: .Plain, target: self, action: Selector("submitButtonTapped:"));
+        self.navigationItem.setRightBarButtonItem(submitButton, animated: false);
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated);
         
         self.title = "Question \(currentQuestionIndex! + 1)";
+        self.tableView.reloadData();
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "NavigateToAnswer") {
+            let correctAnswerIndex = self.dataDTO!.questions[currentQuestionIndex!].correctAnswerIndex;
+            let selectedAnswerIndex = lastSelectedIndexPath!.row - 1;
+
             let answerViewController = segue.destinationViewController as! AnswerViewController;
-            answerViewController.didAnswerCorrectly = (sender as! Bool);
+            answerViewController.didAnswerCorrectly = (correctAnswerIndex == selectedAnswerIndex);
+            answerViewController.dataDTO = self.dataDTO;
+            answerViewController.currentQuestionIndex = self.currentQuestionIndex;
         }
     }
     
@@ -56,15 +64,20 @@ class QuestionTableViewController : UITableViewController {
         self.navigationController?.popToRootViewControllerAnimated(true);
     }
     
+    func submitButtonTapped(sender: UIButton) {
+        if (lastSelectedIndexPath != nil) {
+            performSegueWithIdentifier("NavigateToAnswer", sender: nil);
+            lastSelectedIndexPath = nil;
+        }
+    }
+    
     // MARK: - Table View
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true);
-        
-        let correctAnswerIndex = self.dataDTO!.questions[currentQuestionIndex!].correctAnswerIndex;
-        let selectedAnswerIndex = indexPath.row - 1;
-        let didAnswerCorrectly = correctAnswerIndex == selectedAnswerIndex;
-        performSegueWithIdentifier("NavigateToAnswer", sender: didAnswerCorrectly);
+        if (lastSelectedIndexPath != nil) {
+            tableView.deselectRowAtIndexPath(lastSelectedIndexPath!, animated: true);
+        }
+        lastSelectedIndexPath = indexPath;
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,7 +107,6 @@ class QuestionTableViewController : UITableViewController {
             configureAnswerOptionCell(answerCell, forIndexPath: indexPath);
             return answerCell;
         }
-
     }
     
     func configureQuestionCell(questionCell : QuestionTableViewCell, forIndexPath indexPath: NSIndexPath) {
