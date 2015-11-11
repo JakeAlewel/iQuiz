@@ -116,11 +116,10 @@
 		4E8FFF601BF2A1BE004942F6 /* QuizQuestions */ = {
 			isa = PBXGroup;
 			children = (
-				4E87B3211BF2DEE6006F8683 /* AnswerViewController.swift */,
 				4E8FFF611BF2A8FB004942F6 /* QuestionTableViewCell.swift */,
 				4E9FD6341BF2C31E00419024 /* AnswerOptionTableViewCell.swift */,
 				4E8FFF5A1BF29ECD004942F6 /* QuestionTableViewController.swift */,
-				4E87B3231BF2E9AF006F8683 /* CustomBackAnimationController.swift */,
+				4E87B3211BF2DEE6006F8683 /* AnswerViewController.swift */,
 			);
 			name = QuizQuestions;
 			sourceTree = "<group>";
@@ -151,6 +150,7 @@
 				4EF569341BE9B2DA002F6915 /* AppDelegate.swift */,
 				4EF569381BE9B2DA002F6915 /* Main.storyboard */,
 				4E87B3251BF2F904006F8683 /* FinishedViewController.swift */,
+				4E87B3231BF2E9AF006F8683 /* CustomBackAnimationController.swift */,
 				4E8FFF601BF2A1BE004942F6 /* QuizQuestions */,
 				4E8FFF5F1BF2A1B2004942F6 /* QuizData */,
 				4E8FFF5E1BF2A19C004942F6 /* QuizTableView */,

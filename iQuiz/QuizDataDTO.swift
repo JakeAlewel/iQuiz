@@ -13,6 +13,7 @@ class QuizDataDTO {
     let quizName: String;
     let quizDescription: String;
     let questions: [QuizQuestionDataDTO];
+    var numberOfCorrectAnswers : Int = 0;
     
     init(quizName: String, quizDescription: String, questions: [QuizQuestionDataDTO]) {
         self.quizName = quizName;

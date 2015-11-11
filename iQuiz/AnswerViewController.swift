@@ -11,6 +11,9 @@ import UIKit
 
 class AnswerViewController : UIViewController, UINavigationControllerDelegate {
     
+    @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var answerLabel: UILabel!
+    
     private let customNavigationAnimationController = CustomBackAnimationController()
     
     var didAnswerCorrectly : Bool?
@@ -22,13 +25,13 @@ class AnswerViewController : UIViewController, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        navigationController?.delegate = self;
-        
         let closeButton = UIBarButtonItem(title: "Close", style: .Done, target: self, action: Selector("closeButtonTapped:"));
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: false);
         
         let nextButton = UIBarButtonItem(title: "Next", style: .Plain, target: self, action: Selector("nextButtonTapped:"));
         self.navigationItem.setRightBarButtonItem(nextButton, animated: false);
+        
+        self.title = "Question \(currentQuestionIndex! + 1)";
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,6 +42,10 @@ class AnswerViewController : UIViewController, UINavigationControllerDelegate {
         } else {
             self.view.backgroundColor = UIColor.redColor();
         }
+        
+        let questionDTO = self.dataDTO!.questions[self.currentQuestionIndex!];
+        questionLabel.text = questionDTO.questionText;
+        answerLabel.text = questionDTO.answerOptions[questionDTO.correctAnswerIndex];
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -61,7 +68,9 @@ class AnswerViewController : UIViewController, UINavigationControllerDelegate {
             let questionViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)!-2] as! QuestionTableViewController;
             questionViewController.currentQuestionIndex!++;
 
+            navigationController?.delegate = self;
             self.navigationController!.popViewControllerAnimated(true);
+            navigationController?.delegate = nil;
         }
     }
     

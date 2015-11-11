@@ -180,9 +180,42 @@
                     <view key="view" contentMode="scaleToFill" id="N39-bt-Vji">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question Text" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="P5X-MT-Nvr">
+                                <rect key="frame" x="20" y="114" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Correct Answer Was:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="0jf-Ag-ZGl">
+                                <rect key="frame" x="20" y="184.5" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Answer Text" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="LaN-V5-R5b">
+                                <rect key="frame" x="20" y="255" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="LaN-V5-R5b" secondAttribute="trailing" id="0Ix-67-eP6"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="LaN-V5-R5b" secondAttribute="leading" id="5Nz-T4-9B0"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="P5X-MT-Nvr" secondAttribute="trailing" id="7X1-mv-Igl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0jf-Ag-ZGl" secondAttribute="trailing" id="L0f-w4-kqm"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="P5X-MT-Nvr" secondAttribute="leading" id="Ojh-cX-Xpz"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="0jf-Ag-ZGl" secondAttribute="leading" id="QCf-9L-QJL"/>
+                            <constraint firstItem="0jf-Ag-ZGl" firstAttribute="top" secondItem="P5X-MT-Nvr" secondAttribute="bottom" constant="50" id="QN2-e1-TDw"/>
+                            <constraint firstItem="LaN-V5-R5b" firstAttribute="top" secondItem="0jf-Ag-ZGl" secondAttribute="bottom" constant="50" id="lCy-vB-IhO"/>
+                            <constraint firstItem="P5X-MT-Nvr" firstAttribute="top" secondItem="eaH-Nb-Fkm" secondAttribute="bottom" constant="50" id="xXE-ZS-Mfg"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="answerLabel" destination="LaN-V5-R5b" id="TzT-so-qBt"/>
+                        <outlet property="questionLabel" destination="P5X-MT-Nvr" id="EjP-xP-JDd"/>
                         <segue destination="R9Q-A0-Ybd" kind="show" identifier="NavigateToFinished" id="KIR-Qz-9fH"/>
                     </connections>
                 </viewController>

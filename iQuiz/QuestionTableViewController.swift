@@ -27,7 +27,7 @@ class QuestionTableViewController : UITableViewController {
         super.viewDidLoad();
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 160.0
+        self.tableView.estimatedRowHeight = 44.0
         self.tableView.tableFooterView = UIView();
         
         self.navigationItem.setHidesBackButton(true, animated: false);
@@ -50,9 +50,13 @@ class QuestionTableViewController : UITableViewController {
         if (segue.identifier == "NavigateToAnswer") {
             let correctAnswerIndex = self.dataDTO!.questions[currentQuestionIndex!].correctAnswerIndex;
             let selectedAnswerIndex = lastSelectedIndexPath!.row - 1;
-
+            let didAnswerCorrectly = (correctAnswerIndex == selectedAnswerIndex);
+            if (didAnswerCorrectly == true) {
+                self.dataDTO!.numberOfCorrectAnswers++;
+            }
+            
             let answerViewController = segue.destinationViewController as! AnswerViewController;
-            answerViewController.didAnswerCorrectly = (correctAnswerIndex == selectedAnswerIndex);
+            answerViewController.didAnswerCorrectly = didAnswerCorrectly;
             answerViewController.dataDTO = self.dataDTO;
             answerViewController.currentQuestionIndex = self.currentQuestionIndex;
         }
@@ -65,7 +69,7 @@ class QuestionTableViewController : UITableViewController {
     }
     
     func submitButtonTapped(sender: UIButton) {
-        if (lastSelectedIndexPath != nil) {
+        if (lastSelectedIndexPath != nil) {            
             performSegueWithIdentifier("NavigateToAnswer", sender: nil);
             lastSelectedIndexPath = nil;
         }
