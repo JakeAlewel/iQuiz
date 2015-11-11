@@ -1,5 +1,5 @@
 //
-//  QuestionViewController.swift
+//  QuestionTableViewCell.swift
 //  iQuiz
 //
 //  Created by Jacob Alewel on 11/10/15.
@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-class QuestionViewController : UIViewController {
+class QuestionTableViewCell : UITableViewCell {
     
-    
+    @IBOutlet weak var questionLabel: UILabel!
+
 }
