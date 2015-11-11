@@ -11,6 +11,8 @@ import UIKit
 
 class AnswerViewController : UIViewController, UINavigationControllerDelegate {
     
+    private let customNavigationAnimationController = CustomBackAnimationController()
+    
     var didAnswerCorrectly : Bool?
     var dataDTO : QuizDataDTO?
     var currentQuestionIndex : Int?
@@ -40,10 +42,9 @@ class AnswerViewController : UIViewController, UINavigationControllerDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "NavigateBackToFinished") {
-            let questionViewController = segue.destinationViewController as! QuestionTableViewController;
-            questionViewController.currentQuestionIndex = self.currentQuestionIndex! + 1;
-            questionViewController.dataDTO = self.dataDTO;
+        if (segue.identifier == "NavigateToFinished") {
+            let finishedViewController = segue.destinationViewController as! FinishedViewController;
+            finishedViewController.dataDTO = self.dataDTO;
         }
     }
     
@@ -54,26 +55,19 @@ class AnswerViewController : UIViewController, UINavigationControllerDelegate {
     }
     
     func nextButtonTapped(sender: UIButton) {
-        if (self.currentQuestionIndex == dataDTO?.questions.count) {
-            
+        if (self.currentQuestionIndex == dataDTO!.questions.count - 1) {
+            performSegueWithIdentifier("NavigateToFinished", sender: nil);
         } else {
-            
             let questionViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)!-2] as! QuestionTableViewController;
             questionViewController.currentQuestionIndex!++;
-            
-            
-//            let transition = CATransition();
-//            transition.duration = 0.3;
-//            transition.type = kCATransitionPush;
-//            transition.subtype = kCATransitionFromRight;
-//            self.navigationController!.view.layer.addAnimation(transition, forKey: kCATransition);
+
             self.navigationController!.popViewControllerAnimated(true);
         }
     }
     
-    let customNavigationAnimationController = CustomBackAnimationController()
+    // MARK: - Custom Navigation Animation
+    
     func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        customNavigationAnimationController.reverse = operation == .Pop
         return customNavigationAnimationController
     }
     
