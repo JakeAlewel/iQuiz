@@ -14,7 +14,7 @@ class QuizTableViewController : UITableViewController {
     let dataProxy = QuizDataProxy();
     var dataDtos : [QuizDataDTO]?;
     
-    // Mark: View Lifecycle
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -34,7 +34,16 @@ class QuizTableViewController : UITableViewController {
         }
     }
     
-    // Mark: Actions
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if (segue.identifier == "NavigateToQuizQuestion") {
+            let firstQuestionViewController = segue.destinationViewController as! QuestionTableViewController;
+            let dtoIndex = sender as! Int;
+            firstQuestionViewController.dataDTO = self.dataDtos![dtoIndex];
+            firstQuestionViewController.currentQuestionIndex = 0;
+        }
+    }
+    
+    // MARK: - Actions
     
     func handleSettingsButtonTapped(sender: UIButton) {
         let alertController = UIAlertController(title: "Settings", message: "They Go Here", preferredStyle: UIAlertControllerStyle.Alert);
@@ -48,10 +57,10 @@ class QuizTableViewController : UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true);
         
-        self.performSegueWithIdentifier("NavigateToQuizQuestion", sender: nil);
+        self.performSegueWithIdentifier("NavigateToQuizQuestion", sender: indexPath.row);
     }
     
-    // Mark: UITableView
+    // MARK: - UITableView
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if dataDtos == nil {

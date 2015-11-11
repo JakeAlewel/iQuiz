@@ -161,10 +161,31 @@
                             <outlet property="delegate" destination="flU-Hw-LBu" id="sDd-jG-5id"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="AnK-RH-pFA" kind="show" identifier="NavigateToAnswer" id="J2O-IJ-K2q"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uRi-KH-N7S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1603" y="529"/>
+        </scene>
+        <!--Answer View Controller-->
+        <scene sceneID="tD3-e2-VZu">
+            <objects>
+                <viewController id="AnK-RH-pFA" customClass="AnswerViewController" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eaH-Nb-Fkm"/>
+                        <viewControllerLayoutGuide type="bottom" id="008-we-Big"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="N39-bt-Vji">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YvP-P4-tfH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2287" y="529"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OTA-fW-PiO">

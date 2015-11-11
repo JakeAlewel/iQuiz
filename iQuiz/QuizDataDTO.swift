@@ -12,10 +12,12 @@ class QuizDataDTO {
     
     let quizName: String;
     let quizDescription: String;
+    let questions: [QuizQuestionDataDTO];
     
-    init(quizName: String, quizDescription: String) {
+    init(quizName: String, quizDescription: String, questions: [QuizQuestionDataDTO]) {
         self.quizName = quizName;
         self.quizDescription = quizDescription;
+        self.questions = questions;
     }
     
 }

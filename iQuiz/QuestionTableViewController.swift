@@ -13,16 +13,19 @@ let superLongBad = "Super long Test Question Cell to test line wrapping and othe
 
 let QuestionCellIdentifier = "QuestionCell";
 let AnswerOptionCellIdentifier = "AnswerOptionCell";
-var token: dispatch_once_t = 0;
 
 class QuestionTableViewController : UITableViewController {
+
+    var dataDTO : QuizDataDTO?;
+    var currentQuestionIndex : Int?;
     
     static var questionSizingCell : QuestionTableViewCell? = nil;
     static var answerOptionSizingCell : AnswerOptionTableViewCell? = nil;
     
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad();
-        
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 160.0
@@ -34,13 +37,76 @@ class QuestionTableViewController : UITableViewController {
         self.navigationItem.setRightBarButtonItem(barButtonItem, animated: false);
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated);
+        
+        self.title = "Question \(currentQuestionIndex! + 1)";
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "NavigateToAnswer") {
+            let answerViewController = segue.destinationViewController as! AnswerViewController;
+            answerViewController.didAnswerCorrectly = (sender as! Bool);
+        }
+    }
+    
+    // MARK: - Actions
+    
     func closeButtonTapped(sender: UIButton) {
         self.navigationController?.popToRootViewControllerAnimated(true);
+    }
+    
+    // MARK: - Table View
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true);
+        
+        let correctAnswerIndex = self.dataDTO!.questions[currentQuestionIndex!].correctAnswerIndex;
+        let selectedAnswerIndex = indexPath.row - 1;
+        let didAnswerCorrectly = correctAnswerIndex == selectedAnswerIndex;
+        performSegueWithIdentifier("NavigateToAnswer", sender: didAnswerCorrectly);
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5;
     }
+    
+    // MARK: - Cell Configuration
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if (indexPath.row == 0) {
+            var cell = tableView.dequeueReusableCellWithIdentifier("QuestionCell");
+            if (cell == nil) {
+                cell = QuestionTableViewCell();
+            }
+            
+            let questionCell = cell as! QuestionTableViewCell;
+            configureQuestionCell(questionCell, forIndexPath: indexPath);
+            
+            return questionCell;
+        } else {
+            var cell = tableView.dequeueReusableCellWithIdentifier("AnswerOptionCell");
+            if (cell == nil) {
+                cell = AnswerOptionTableViewCell();
+            }
+            
+            let answerCell = cell as! AnswerOptionTableViewCell;
+            configureAnswerOptionCell(answerCell, forIndexPath: indexPath);
+            return answerCell;
+        }
+
+    }
+    
+    func configureQuestionCell(questionCell : QuestionTableViewCell, forIndexPath indexPath: NSIndexPath) {
+        questionCell.questionLabel.text = self.dataDTO!.questions[currentQuestionIndex!].questionText;
+    }
+    
+    func configureAnswerOptionCell(answerOptionCell : AnswerOptionTableViewCell, forIndexPath indexPath: NSIndexPath) {
+        answerOptionCell.rowIndicatorLabel.text = "\(indexPath.row))";
+        answerOptionCell.answerLabel.text = self.dataDTO!.questions[currentQuestionIndex!].answerOptions[indexPath.row - 1];
+    }
+    
+    // MARK: - Cell Height
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (indexPath.row == 0) {
@@ -72,68 +138,6 @@ class QuestionTableViewController : UITableViewController {
         
         let size = sizingCell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize);
         return size.height + 1.0;
-    }
-    
-
-    
-//    - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return [self heightForBasicCellAtIndexPath:indexPath];
-//    }
-//
-//    - (CGFloat)heightForBasicCellAtIndexPath:(NSIndexPath *)indexPath {
-//    static RWBasicCell *sizingCell = nil;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//    sizingCell = [self.tableView dequeueReusableCellWithIdentifier:RWBasicCellIdentifier];
-//    });
-//    
-//    [self configureBasicCell:sizingCell atIndexPath:indexPath];
-//    return [self calculateHeightForConfiguredSizingCell:sizingCell];
-//    }
-//    
-//    - (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
-//    [sizingCell setNeedsLayout];
-//    [sizingCell layoutIfNeeded];
-//    
-//    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-//    return size.height + 1.0f; // Add 1.0f for the cell separator height
-//    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if (indexPath.row == 0) {
-            var cell = tableView.dequeueReusableCellWithIdentifier("QuestionCell");
-            if (cell == nil) {
-                cell = QuestionTableViewCell();
-            }
-            
-            let questionCell = cell as! QuestionTableViewCell;
-            configureQuestionCell(questionCell, forIndexPath: indexPath);
-            
-            return questionCell;
-        } else {
-            var cell = tableView.dequeueReusableCellWithIdentifier("AnswerOptionCell");
-            if (cell == nil) {
-                cell = AnswerOptionTableViewCell();
-            }
-            
-            let answerCell = cell as! AnswerOptionTableViewCell;
-            configureAnswerOptionCell(answerCell, forIndexPath: indexPath);
-            return answerCell;
-        }
-
-    }
-    
-    func configureQuestionCell(questionCell : QuestionTableViewCell, forIndexPath indexPath: NSIndexPath) {
-        questionCell.questionLabel.text = superLongBad;
-    }
-
-    func configureAnswerOptionCell(answerOptionCell : AnswerOptionTableViewCell, forIndexPath indexPath: NSIndexPath) {
-        answerOptionCell.rowIndicatorLabel.text = "\(indexPath.row)";
-        answerOptionCell.answerLabel.text = superLongBad;
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true);
     }
     
 }
