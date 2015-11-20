@@ -26,10 +26,14 @@ class QuizTableViewController : UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated);
+        
         dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
             if successful {
-                self.dataDtos = dtos!;
+                self.dataDtos = dtos;
                 self.tableView.reloadData();
+            } else {
+                self.presentNetworkErrorAlert();
             }
         }
     }
@@ -46,12 +50,7 @@ class QuizTableViewController : UITableViewController {
     // MARK: - Actions
     
     func handleSettingsButtonTapped(sender: UIButton) {
-        let alertController = UIAlertController(title: "Settings", message: "They Go Here", preferredStyle: UIAlertControllerStyle.Alert);
-
-        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
-        alertController.addAction(alertAction);
-        
-        self.presentViewController(alertController, animated: true, completion: nil);
+        self.presentSettingsAlert();
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -86,6 +85,26 @@ class QuizTableViewController : UITableViewController {
         quizCell.nameLabel.text = dto.quizName;
         quizCell.descriptionLabel.text = dto.quizDescription;
         return quizCell;
+    }
+    
+    // Mark: Alerts
+    
+    func presentNetworkErrorAlert() {
+        let alertController = UIAlertController(title: "Oh No!", message: "Something went wrong with your network, how sad...", preferredStyle: UIAlertControllerStyle.Alert);
+        
+        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        alertController.addAction(alertAction);
+        
+        self.presentViewController(alertController, animated: true, completion: nil);
+    }
+    
+    func presentSettingsAlert() {
+        let alertController = UIAlertController(title: "Settings", message: "They Go Here", preferredStyle: UIAlertControllerStyle.Alert);
+        
+        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        alertController.addAction(alertAction);
+        
+        self.presentViewController(alertController, animated: true, completion: nil);
     }
     
 }
