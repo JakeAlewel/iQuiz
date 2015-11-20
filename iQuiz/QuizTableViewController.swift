@@ -43,12 +43,20 @@ class QuizTableViewController : UITableViewController {
     // MARK: - Data
     
     func loadData() {
-        dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
+        dataProxy.loadQuizesWithCompletionHandler { (fromCache, dtos) -> Void in
             if dtos != nil {
+                if fromCache {
+                    self.presentNetworkErrorAlert("We could not load data from server, falling back on cache");
+                }
                 self.dataDtos = dtos;
                 self.tableView.reloadData();
             } else {
-                self.presentNetworkErrorAlert();
+                if fromCache {
+                    self.presentNetworkErrorAlert("We could not load data from server, and could not load from cache");
+                } else {
+                    self.presentNetworkErrorAlert("We could not load data from server");
+                }
+                
             }
         }
     }
@@ -95,8 +103,8 @@ class QuizTableViewController : UITableViewController {
     
     // Mark: Alerts
     
-    func presentNetworkErrorAlert() {
-        let alertController = UIAlertController(title: "Oh No!", message: "Something went wrong with your network, how sad...", preferredStyle: UIAlertControllerStyle.Alert);
+    func presentNetworkErrorAlert(errorMessage : String) {
+        let alertController = UIAlertController(title: "Oh No!", message: "Something went wrong! \(errorMessage)... how sad.", preferredStyle: UIAlertControllerStyle.Alert);
         
         let retryAction = UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
             self.loadData();
@@ -111,8 +119,17 @@ class QuizTableViewController : UITableViewController {
     
     func presentSettingsAlert() {
         let alertController = UIAlertController(title: "Settings", message: "They Go Here", preferredStyle: UIAlertControllerStyle.Alert);
+        alertController.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.text = self.dataProxy.quizDataResourcePath;
+        }
         
-        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        let alertAction = UIAlertAction(title: "Check Now", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let loginTextField = alertController.textFields![0] as UITextField
+                self.dataProxy.quizDataResourcePath = loginTextField.text!;
+                self.loadData();                
+            })
+        }
         alertController.addAction(alertAction);
         
         self.presentViewController(alertController, animated: true, completion: nil);

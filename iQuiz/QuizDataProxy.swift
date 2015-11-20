@@ -15,7 +15,7 @@ class QuizDataProxy {
     
     var quizDataResourcePath : String = "http://tednewardsandbox.site44.com/questions.json";
     
-    func loadQuizesWithCompletionHandler(completionHandler: (successful: Bool, dtos: [QuizDataDTO]?) -> Void) {
+    func loadQuizesWithCompletionHandler(completionHandler: (fromCache: Bool, dtos: [QuizDataDTO]?) -> Void) {
         let urlToLoad = NSURL(string: quizDataResourcePath);
         if (urlToLoad == nil) {
             return;
@@ -31,26 +31,29 @@ class QuizDataProxy {
                 } else {
                     if (data == nil) {
                         self.attemptToRecoverFromCache(completionHandler);
-                        return;
+                    } else {
+                        let parsedQuizData : [QuizDataDTO]? = self.parseJsonData(data!);
+                        completionHandler(fromCache: false, dtos: parsedQuizData);
                     }
-                    
-                    let parsedQuizData : [QuizDataDTO]? = self.parseJsonData(data!);
-                    completionHandler(successful: true, dtos: parsedQuizData);
                 }
             })
         }
         task.resume();
     }
     
-    func attemptToRecoverFromCache(completionHandler: (successful: Bool, dtos: [QuizDataDTO]?) -> Void) {
+    // MARK: - Error Handling
+    
+    func attemptToRecoverFromCache(completionHandler: (fromCache: Bool, dtos: [QuizDataDTO]?) -> Void) {
         let quizData = NSUserDefaults.standardUserDefaults().objectForKey(QuizDataProxy.CacheKey) as? NSData;
         if (quizData != nil) {
             let parsedQuizData : [QuizDataDTO]? = self.parseJsonData(quizData!);
-            completionHandler(successful: true, dtos: parsedQuizData);
+            completionHandler(fromCache: true, dtos: parsedQuizData);
         } else {
-            completionHandler(successful: false, dtos: nil);
+            completionHandler(fromCache: true, dtos: nil);
         }
     }
+    
+    // MARK: - JSON Parsing
     
     func parseJsonData(jsonData: NSData) -> [QuizDataDTO]? {
         do {
