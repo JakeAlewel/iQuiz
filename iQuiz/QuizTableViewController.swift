@@ -28,14 +28,7 @@ class QuizTableViewController : UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated);
         
-        dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
-            if successful {
-                self.dataDtos = dtos;
-                self.tableView.reloadData();
-            } else {
-                self.presentNetworkErrorAlert();
-            }
-        }
+        self.loadData();
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -44,6 +37,19 @@ class QuizTableViewController : UITableViewController {
             let dtoIndex = sender as! Int;
             firstQuestionViewController.dataDTO = self.dataDtos![dtoIndex];
             firstQuestionViewController.currentQuestionIndex = 0;
+        }
+    }
+    
+    // MARK: - Data
+    
+    func loadData() {
+        dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
+            if dtos != nil {
+                self.dataDtos = dtos;
+                self.tableView.reloadData();
+            } else {
+                self.presentNetworkErrorAlert();
+            }
         }
     }
     
@@ -92,7 +98,12 @@ class QuizTableViewController : UITableViewController {
     func presentNetworkErrorAlert() {
         let alertController = UIAlertController(title: "Oh No!", message: "Something went wrong with your network, how sad...", preferredStyle: UIAlertControllerStyle.Alert);
         
-        let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        let retryAction = UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+            self.loadData();
+        }
+        let alertAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil);
+        
+        alertController.addAction(retryAction);
         alertController.addAction(alertAction);
         
         self.presentViewController(alertController, animated: true, completion: nil);

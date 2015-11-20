@@ -11,6 +11,8 @@ import UIKit
 
 class QuizDataProxy {
     
+    static var CacheKey = "CacheKeyFor_iQuiz"
+    
     var quizDataResourcePath : String = "http://tednewardsandbox.site44.com/questions.json";
     
     func loadQuizesWithCompletionHandler(completionHandler: (successful: Bool, dtos: [QuizDataDTO]?) -> Void) {
@@ -19,45 +21,60 @@ class QuizDataProxy {
             return;
         }
         
-        let request = NSURLRequest(URL: urlToLoad!);
+        let request = NSURLRequest(URL: urlToLoad!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60);
         let urlSession = NSURLSession.sharedSession();
         
         let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if (error != nil) {
-                    completionHandler(successful: false, dtos: nil);
+                    self.attemptToRecoverFromCache(completionHandler);
                 } else {
-                    do {
-                        if (data == nil) {
-                            completionHandler(successful: false, dtos: nil);
-                            return;
-                        }
-                        let JSON = try NSJSONSerialization.JSONObjectWithData(data!, options:NSJSONReadingOptions.AllowFragments)
-                        guard let JSONArray :NSArray = JSON as? NSArray else {
-                            completionHandler(successful: false, dtos: nil);
-                            return;
-                        }
-                        
-                        let quizData = self.parseJSONToQuizData(JSONArray);
-                        completionHandler(successful: true, dtos: quizData);
+                    if (data == nil) {
+                        self.attemptToRecoverFromCache(completionHandler);
+                        return;
                     }
-                    catch {
-                        completionHandler(successful: false, dtos: nil);
-                    }
+                    
+                    let parsedQuizData : [QuizDataDTO]? = self.parseJsonData(data!);
+                    completionHandler(successful: true, dtos: parsedQuizData);
                 }
             })
         }
         task.resume();
     }
     
-    func parseJSONToQuizData(jsonArray : NSArray) -> [QuizDataDTO] {
+    func attemptToRecoverFromCache(completionHandler: (successful: Bool, dtos: [QuizDataDTO]?) -> Void) {
+        let quizData = NSUserDefaults.standardUserDefaults().objectForKey(QuizDataProxy.CacheKey) as? NSData;
+        if (quizData != nil) {
+            let parsedQuizData : [QuizDataDTO]? = self.parseJsonData(quizData!);
+            completionHandler(successful: true, dtos: parsedQuizData);
+        } else {
+            completionHandler(successful: false, dtos: nil);
+        }
+    }
+    
+    func parseJsonData(jsonData: NSData) -> [QuizDataDTO]? {
+        do {
+            let JSON = try NSJSONSerialization.JSONObjectWithData(jsonData, options:NSJSONReadingOptions.AllowFragments)
+            guard let JSONArray :NSArray = JSON as? NSArray else {
+                return nil;
+            }
+            
+            let quizData = self.parseQuizData(JSONArray);
+            NSUserDefaults.standardUserDefaults().setObject(jsonData, forKey: QuizDataProxy.CacheKey);
+            return quizData;
+        } catch {
+            return nil;
+        }
+    }
+    
+    func parseQuizData(jsonArray : NSArray) -> [QuizDataDTO] {
         var quizDataDTOs : [QuizDataDTO] = [];
         
         for quizData in jsonArray {
             let quizDictionary : NSDictionary = (quizData as? NSDictionary)!;
             
             let questionsArray = (quizDictionary["questions"] as? NSArray)!;
-            let questionDTOs = self.parseJSONToQuestionsArray(questionsArray);
+            let questionDTOs = self.parseQuestionsData(questionsArray);
             let quizName = (quizDictionary["title"] as? String)!;
             let quizDescription = (quizDictionary["desc"] as? String)!;
             
@@ -68,7 +85,7 @@ class QuizDataProxy {
         return quizDataDTOs;
     }
     
-    func parseJSONToQuestionsArray(questionsArray : NSArray) -> [QuizQuestionDataDTO] {
+    func parseQuestionsData(questionsArray : NSArray) -> [QuizQuestionDataDTO] {
         var questionDTOs : [QuizQuestionDataDTO] = [];
         
         for questionData in questionsArray {
