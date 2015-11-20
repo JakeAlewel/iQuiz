@@ -28,7 +28,7 @@ class QuizTableViewController : UITableViewController {
     override func viewWillAppear(animated: Bool) {
         dataProxy.loadQuizesWithCompletionHandler { (successful, dtos) -> Void in
             if successful {
-                self.dataDtos = dtos;
+                self.dataDtos = dtos!;
                 self.tableView.reloadData();
             }
         }

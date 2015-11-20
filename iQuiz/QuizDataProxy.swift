@@ -11,30 +11,77 @@ import UIKit
 
 class QuizDataProxy {
     
-    func loadQuizesWithCompletionHandler(completionHandler: (successful: Bool, dtos: [QuizDataDTO]) -> Void) {
+    var quizDataResourcePath : String = "http://tednewardsandbox.site44.com/questions.json";
+    
+    func loadQuizesWithCompletionHandler(completionHandler: (successful: Bool, dtos: [QuizDataDTO]?) -> Void) {
+        let urlToLoad = NSURL(string: quizDataResourcePath);
+        if (urlToLoad == nil) {
+            return;
+        }
         
-        let answerOptions = [
-            "1",
-            "2",
-            "3",
-            "4"
-        ];
+        let request = NSURLRequest(URL: urlToLoad!);
+        let urlSession = NSURLSession.sharedSession();
         
-        let questionDTOs = [
-            QuizQuestionDataDTO(questionText: "2 + 2 = ?", answerOptions: answerOptions, correctAnswerIndex: 3),
-            QuizQuestionDataDTO(questionText: "1 + 1 = ?", answerOptions: answerOptions, correctAnswerIndex: 1),
-            QuizQuestionDataDTO(questionText: "3 - 2 = ?", answerOptions: answerOptions, correctAnswerIndex: 0),
-            QuizQuestionDataDTO(questionText: "4 - 1 = ?", answerOptions: answerOptions, correctAnswerIndex: 2)
-        ];
+        let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (error != nil) {
+                    completionHandler(successful: false, dtos: nil);
+                } else {
+                    do {
+                        if (data == nil) {
+                            completionHandler(successful: false, dtos: nil);
+                            return;
+                        }
+                        let JSON = try NSJSONSerialization.JSONObjectWithData(data!, options:NSJSONReadingOptions.AllowFragments)
+                        guard let JSONArray :NSArray = JSON as? NSArray else {
+                            completionHandler(successful: false, dtos: nil);
+                            return;
+                        }
+                        
+                        let quizData = self.parseJSONToQuizData(JSONArray);
+                        completionHandler(successful: true, dtos: quizData);
+                    }
+                    catch {
+                        completionHandler(successful: false, dtos: nil);
+                    }
+                }
+            })
+        }
+        task.resume();
+    }
+    
+    func parseJSONToQuizData(jsonArray : NSArray) -> [QuizDataDTO] {
+        var quizDataDTOs : [QuizDataDTO] = [];
         
-        let quizData = [
-            QuizDataDTO(quizName: "Mathematics", quizDescription: "Maths r tght 2 lrn", questions: questionDTOs),
-            QuizDataDTO(quizName: "Marvel", quizDescription: "How super is your knowledge on heros?", questions: questionDTOs),
-            QuizDataDTO(quizName: "Science", quizDescription: "Time to do some science!", questions: questionDTOs)
-        ];
+        for quizData in jsonArray {
+            let quizDictionary : NSDictionary = (quizData as? NSDictionary)!;
+            
+            let questionsArray = (quizDictionary["questions"] as? NSArray)!;
+            let questionDTOs = self.parseJSONToQuestionsArray(questionsArray);
+            let quizName = (quizDictionary["title"] as? String)!;
+            let quizDescription = (quizDictionary["desc"] as? String)!;
+            
+            let quizDataDTO = QuizDataDTO(quizName: quizName, quizDescription: quizDescription, questions: questionDTOs);
+            quizDataDTOs.append(quizDataDTO);
+        }
         
-        completionHandler(successful: true, dtos: quizData);
+        return quizDataDTOs;
+    }
+    
+    func parseJSONToQuestionsArray(questionsArray : NSArray) -> [QuizQuestionDataDTO] {
+        var questionDTOs : [QuizQuestionDataDTO] = [];
         
+        for questionData in questionsArray {
+            let questionDictionary : NSDictionary = (questionData as? NSDictionary)!;
+            let questionText = (questionDictionary["text"] as? String)!;
+            let answers = (questionDictionary["answers"] as? NSArray)!
+            let correctAnswerIndex = (questionDictionary["answer"] as? NSString)!.integerValue;
+            
+            let questionDataDTO = QuizQuestionDataDTO(questionText: questionText, answerOptions: answers as! [String], correctAnswerIndex: correctAnswerIndex);
+            questionDTOs.append(questionDataDTO);
+        }
+        
+        return questionDTOs;
     }
     
 }
