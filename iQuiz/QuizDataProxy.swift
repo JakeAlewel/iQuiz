@@ -63,7 +63,7 @@ class QuizDataProxy {
             }
             
             let quizData = self.parseQuizData(JSONArray);
-            NSUserDefaults.standardUserDefaults().setObject(jsonData, forKey: QuizDataProxy.CacheKey);
+            NSUserDefaults.standardUserDefaults().setObject(jsonData, forKey: quizDataResourcePath);
             return quizData;
         } catch {
             return nil;

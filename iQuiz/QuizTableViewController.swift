@@ -46,17 +46,16 @@ class QuizTableViewController : UITableViewController {
         dataProxy.loadQuizesWithCompletionHandler { (fromCache, dtos) -> Void in
             if dtos != nil {
                 if fromCache {
-                    self.presentNetworkErrorAlert("We could not load data from server, falling back on cache");
+                    self.presentNetworkErrorAlert("We could not load data from the server, falling back on cache");
                 }
                 self.dataDtos = dtos;
                 self.tableView.reloadData();
             } else {
                 if fromCache {
-                    self.presentNetworkErrorAlert("We could not load data from server, and could not load from cache");
+                    self.presentNetworkErrorAlert("We could not load data from the server, and could not load from cache");
                 } else {
-                    self.presentNetworkErrorAlert("We could not load data from server");
+                    self.presentNetworkErrorAlert("We could not load data from the server");
                 }
-                
             }
         }
     }
@@ -125,9 +124,9 @@ class QuizTableViewController : UITableViewController {
         
         let alertAction = UIAlertAction(title: "Check Now", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                let loginTextField = alertController.textFields![0] as UITextField
-                self.dataProxy.quizDataResourcePath = loginTextField.text!;
-                self.loadData();                
+                let urlTextField = alertController.textFields![0] as UITextField
+                self.dataProxy.quizDataResourcePath = urlTextField.text!;
+                self.loadData();
             })
         }
         alertController.addAction(alertAction);
